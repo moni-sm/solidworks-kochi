@@ -2,18 +2,8 @@ require("dotenv").config();
 const Registration = require("../models/Registration");
 const ExcelJS = require("exceljs");
 const path = require("path");
-const nodemailer = require("nodemailer");
 
-// 📩 Setup Nodemailer transporter (Gmail + App Password)
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER, // your gmail
-    pass: process.env.GMAIL_PASS, // app password
-  },
-});
-
-// 📌 Register User endpoint WITH sending emails
+// 📌 Register User endpoint 
 exports.registerUser = async (req, res) => {
   try {
     const { name, phone, email, organization, designation } = req.body;
@@ -33,49 +23,9 @@ exports.registerUser = async (req, res) => {
     });
     await newRegistration.save();
 
-    // ✅ Email to Client (confirmation)
-    const userMail = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: "✅ Registration Successful",
-      html: `
-        <h2>Hello ${name},</h2>
-        <p>Thank you for registering with us. Here are your details:</p>
-        <ul>
-          <li><b>Organization:</b> ${organization}</li>
-          <li><b>Designation:</b> ${designation}</li>
-          <li><b>Phone:</b> ${phone}</li>
-          <li><b>Email:</b> ${email}</li>
-        </ul>
-        <p>We’ll get in touch with you soon.</p>
-        <br/>
-        <p>Best Regards,<br/>The Team</p>
-      `,
-    };
+    // Uncomment and configure email sending if needed
 
-    // ✅ Email to Admin (notification)
-    const adminMail = {
-      from: process.env.GMAIL_USER,
-      to: process.env.ADMIN_EMAIL, // admin email from .env
-      subject: "📩 New Registration Received",
-      html: `
-        <h2>New Registration Details</h2>
-        <ul>
-          <li><b>Name:</b> ${name}</li>
-          <li><b>Email:</b> ${email}</li>
-          <li><b>Phone:</b> ${phone}</li>
-          <li><b>Organization:</b> ${organization}</li>
-          <li><b>Designation:</b> ${designation}</li>
-          <li><b>Time:</b> ${new Date().toLocaleString()}</li>
-        </ul>
-      `,
-    };
-
-    // Send both mails
-    await transporter.sendMail(userMail);
-    await transporter.sendMail(adminMail);
-
-    res.status(200).json({ message: "✅ Registration successful. Emails sent." });
+    res.status(200).json({ message: "✅ Registration successful." });
   } catch (err) {
     console.error("❌ Registration Error:", err);
     res.status(500).json({ message: "Server error", error: err });

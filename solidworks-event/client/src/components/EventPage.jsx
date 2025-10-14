@@ -21,12 +21,12 @@ export default function EventPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formRef = useRef(null);
-  const API_URL = "https://solid-works-bengaluru.onrender.com"; // Backend URL
+  const API_URL = "http://localhost:5000"; // Backend URL
   const navigate = useNavigate(); // Added
 
   // Countdown logic
   useEffect(() => {
-    const eventDate = new Date("Oct 30, 2025 09:00:00").getTime();
+    const eventDate = new Date("Nov 13, 2025 09:00:00").getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -134,7 +134,7 @@ export default function EventPage() {
         <div className="hero-left">
           <h1>SOLIDWORKS 2026 Launch Event – Bengaluru</h1>
           <div className="event-info">
-            📅 October 30, 2025 • ⏰ 09:00 AM - 05:00 PM
+            📅 November 13, 2025 • ⏰ 09:00 AM - 01:00 PM
             <br />
             📍 Bengaluru, Karnataka - India
           </div>

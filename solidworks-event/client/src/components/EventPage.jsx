@@ -139,12 +139,10 @@ export default function EventPage() {
             📍Kochi, Kerala - India
           </div>
           <h3>Address</h3>
-            <p><b>Taj Yeshwantpur, Kochi</b><br />
-              2275, Tumkur Rd, Yeshwanthpur Industrial Area,
+            <p><b>Novotel Kochi Infopark</b><br />
+              Kakkanad, Kochi,
               <br />
-              Phase 1, Yeswanthpur,
-              <br />
-              Kochi, Kerala 560022
+              Kochi, Kerala 682030
               <br />
               India
             </p>
@@ -230,6 +228,7 @@ export default function EventPage() {
     </div>
   );
 }
+
 
 
 

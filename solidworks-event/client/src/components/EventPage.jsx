@@ -139,11 +139,11 @@ export default function EventPage() {
             📍Kochi, Kerala - India
           </div>
           <h3>Address</h3>
-            <p><b>Novotel Kochi Infopark</b></p><br />
-              <p>Kakkanad,</p>
-              <p>Kochi, Kerala 682030</p>
+            <p><b>Novotel Kochi Infopark</b><br />
+              Kakkanad,Kochi, Kerala 682030
               <br />
-              <p>India</p>
+              India
+            </p>
           
           <button className="register-btn" onClick={showFinalForm}>
             REGISTER NOW
@@ -227,6 +227,7 @@ export default function EventPage() {
     </div>
   );
 }
+
 
 
 

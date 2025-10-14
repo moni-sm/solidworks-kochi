@@ -132,19 +132,19 @@ export default function EventPage() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-left">
-          <h1>SOLIDWORKS 2026 Launch Event – Bengaluru</h1>
+          <h1>SOLIDWORKS 2026 Launch Event – Kochi</h1>
           <div className="event-info">
             📅 November 13, 2025 • ⏰ 09:00 AM - 01:00 PM
             <br />
-            📍 Bengaluru, Karnataka - India
+            📍Kochi, Kerala - India
           </div>
           <h3>Address</h3>
-            <p><b>Taj Yeshwantpur, Bengaluru</b><br />
+            <p><b>Taj Yeshwantpur, Kochi</b><br />
               2275, Tumkur Rd, Yeshwanthpur Industrial Area,
               <br />
               Phase 1, Yeswanthpur,
               <br />
-              Bengaluru, Karnataka 560022
+              Kochi, Kerala 560022
               <br />
               India
             </p>

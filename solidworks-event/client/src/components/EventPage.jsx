@@ -21,7 +21,7 @@ export default function EventPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formRef = useRef(null);
-  const API_URL = "http://localhost:5000"; // Backend URL
+  const API_URL = "https://solidworks-kochi.onrender.com"; // Backend URL
   const navigate = useNavigate(); // Added
 
   // Countdown logic
@@ -230,6 +230,7 @@ export default function EventPage() {
     </div>
   );
 }
+
 
 
 

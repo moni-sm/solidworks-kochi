@@ -134,7 +134,7 @@ export default function EventPage() {
         <div className="hero-left">
           <h1>SOLIDWORKS 2026 Launch Event – Kochi</h1>
           <div className="event-info">
-            📅 November 13, 2025 • ⏰ 09:00 AM - 01:00 PM
+            📅 November 13, 2025 • ⏰ 09:00 AM - 02:00 PM
             <br />
             📍Kochi, Kerala - India
           </div>
@@ -227,6 +227,7 @@ export default function EventPage() {
     </div>
   );
 }
+
 
 
 

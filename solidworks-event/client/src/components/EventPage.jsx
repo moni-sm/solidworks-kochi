@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Added
 import "./EventPage.css";
+import { useNavigate } from "react-router-dom";
+
 import CkonnectLogo from "../assets/CkonnectLogo.png";
 import DSLogo from "../assets/DSLogo.png";
 import DSBanner from "../assets/DS.png";
 import VenueImage from "../assets/facadenight.jpg";
 import SolidCAMLogo from "../assets/SolidCAM SponserLogo.png";
-import KeyFocusDomains from "../assets/Key Focus Domains.jpg"
-
+import KeyFocusDomains from "../assets/Key Focus Domains.jpg";
 
 export default function EventPage() {
   const [countdown, setCountdown] = useState({
@@ -18,13 +18,14 @@ export default function EventPage() {
   });
 
   const [showForm, setShowForm] = useState(false);
+  const [regClosed, setRegClosed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formRef = useRef(null);
-  const API_URL = "https://solidworks-kochi.onrender.com"; // Backend URL
-  const navigate = useNavigate(); // Added
+  const API_URL = "https://solidworks-kochi.onrender.com";
+  const navigate = useNavigate();
 
-  // Countdown logic
+  // Countdown Timer
   useEffect(() => {
     const eventDate = new Date("Nov 13, 2025 09:00:00").getTime();
 
@@ -54,7 +55,17 @@ export default function EventPage() {
     return () => clearInterval(timer);
   }, []);
 
+  // ✅ Show form only before 7 PM today
   const showFinalForm = () => {
+    const now = new Date();
+    const close = new Date();
+    close.setHours(19, 0, 0, 0); // 7PM
+
+    if (now > close) {
+      setRegClosed(true);
+      return;
+    }
+
     setShowForm(true);
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -73,14 +84,12 @@ export default function EventPage() {
       designation: e.target.designation.value.trim(),
     };
 
-    // Check all fields are filled
     if (Object.values(formData).some((v) => !v)) {
       alert("Please fill all the required fields.");
       setIsSubmitting(false);
       return;
     }
 
-    // Phone validation: exactly 10 digits
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone)) {
       alert("Please enter a valid 10-digit phone number.");
@@ -88,7 +97,6 @@ export default function EventPage() {
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       alert("Please enter a valid email address.");
@@ -104,7 +112,6 @@ export default function EventPage() {
       });
 
       if (response.ok) {
-        // On success navigate to Confirmation page
         navigate("/confirmation");
       } else {
         alert("Registration failed. Please try again.");
@@ -138,38 +145,24 @@ export default function EventPage() {
             <br />
             📍Kochi, Kerala - India
           </div>
+
           <h3>Address</h3>
-            <p><b>Novotel Kochi Infopark</b><br />
-              Kakkanad,Kochi, Kerala 682030
-              <br />
-              India
-            </p>
-          
+          <p>
+            <b>Novotel Kochi Infopark</b><br />
+            Kakkanad, Kochi, Kerala 682030<br />
+            India
+          </p>
+
           <button className="register-btn" onClick={showFinalForm}>
             REGISTER NOW
           </button>
 
+          {/* Countdown */}
           <div className="countdown">
-            <div>
-              <span>{countdown.days}</span>
-              <br />
-              Days
-            </div>
-            <div>
-              <span>{countdown.hours}</span>
-              <br />
-              Hours
-            </div>
-            <div>
-              <span>{countdown.minutes}</span>
-              <br />
-              Minutes
-            </div>
-            <div>
-              <span>{countdown.seconds}</span>
-              <br />
-              Seconds
-            </div>
+            <div><span>{countdown.days}</span><br />Days</div>
+            <div><span>{countdown.hours}</span><br />Hours</div>
+            <div><span>{countdown.minutes}</span><br />Minutes</div>
+            <div><span>{countdown.seconds}</span><br />Seconds</div>
           </div>
 
           <div className="sponsors">
@@ -184,38 +177,64 @@ export default function EventPage() {
         </div>
       </section>
 
+      {/* ✅ Inline Registration Closed Message */}
+      {regClosed && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px",
+            fontSize: "28px",
+            fontWeight: "bold",
+            color: "#b30000",
+            background: "#fff3f3",
+            borderRadius: "12px",
+            margin: "30px auto",
+            width: "90%",
+            border: "2px solid #ffb3b3"
+          }}
+        >
+          Registration Closed — Thank you for your interest!
+          
+          <div
+            style={{
+              fontSize: "18px",
+              marginTop: "10px",
+              color: "#555",
+              fontWeight: "normal"
+            }}
+          >
+            We appreciate your enthusiasm for the SOLIDWORKS 2026 Launch Event.
+            <br />
+            Registrations are now closed.
+          </div>
+        </div>
+      )}
+
       {/* Registration Form */}
-      {showForm && (
+      {showForm && !regClosed && (
         <section className="final-form" ref={formRef}>
           <h2>Complete Your Registration</h2>
           <div className="container-flex">
             <form className="order" onSubmit={submitFinalForm}>
               <div className="form-section">
-                <label htmlFor="name">Full Name</label>
-                <input type="text" id="name" name="name" required />
+                <label>Full Name</label>
+                <input type="text" name="name" required />
               </div>
               <div className="form-section">
-                <label htmlFor="phone">Phone Number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  pattern="[0-9]{10}"
-                  title="Enter 10-digit phone number"
-                />
+                <label>Phone Number</label>
+                <input type="tel" name="phone" required pattern="[0-9]{10}" />
               </div>
               <div className="form-section">
-                <label htmlFor="email">Email ID</label>
-                <input type="email" id="email" name="email" required />
+                <label>Email ID</label>
+                <input type="email" name="email" required />
               </div>
               <div className="form-section">
-                <label htmlFor="organization">Organization</label>
-                <input type="text" id="organization" name="organization" required />
+                <label>Organization</label>
+                <input type="text" name="organization" required />
               </div>
               <div className="form-section">
-                <label htmlFor="designation">Designation</label>
-                <input type="text" id="designation" name="designation" required />
+                <label>Designation</label>
+                <input type="text" name="designation" required />
               </div>
               <button className="submit-btn" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Confirm Registration"}
@@ -227,12 +246,3 @@ export default function EventPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-

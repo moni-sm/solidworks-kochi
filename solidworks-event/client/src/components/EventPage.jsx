@@ -17,11 +17,8 @@ export default function EventPage() {
     seconds: "00",
   });
 
-  const [regClosed, setRegClosed] = useState(false); // ALWAYS show closed message
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const formRef = useRef(null);
-  const API_URL = "https://solidworks-kochi.onrender.com";
+  const [regClosed, setRegClosed] = useState(false);
+  const regClosedRef = useRef(null); // <-- ref for scrolling
   const navigate = useNavigate();
 
   // Countdown Timer
@@ -54,9 +51,14 @@ export default function EventPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // 🚫 Registration permanently closed
+  // 🚫 Registration permanently closed + scroll into view
   const showFinalForm = () => {
     setRegClosed(true);
+
+    // Scroll to message after it renders
+    setTimeout(() => {
+      regClosedRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   };
 
   return (
@@ -75,9 +77,9 @@ export default function EventPage() {
       <section className="hero">
         <div className="hero-left">
           <h1>SOLIDWORKS 2026 Launch Event – Kochi</h1>
+
           <div className="event-info">
-            📅 November 13, 2025 • ⏰ 09:00 AM - 02:00 PM
-            <br />
+            📅 November 13, 2025 • ⏰ 09:00 AM - 02:00 PM<br />
             📍Kochi, Kerala - India
           </div>
 
@@ -112,9 +114,10 @@ export default function EventPage() {
         </div>
       </section>
 
-      {/* 🚫 REGISTRATION CLOSED MESSAGE */}
+      {/* 🚫 REGISTRATION CLOSED MESSAGE WITH SCROLL */}
       {regClosed && (
         <div
+          ref={regClosedRef}
           style={{
             textAlign: "center",
             padding: "40px",

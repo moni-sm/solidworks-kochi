@@ -17,8 +17,7 @@ export default function EventPage() {
     seconds: "00",
   });
 
-  const [showForm, setShowForm] = useState(false);
-  const [regClosed, setRegClosed] = useState(false);
+  const [regClosed, setRegClosed] = useState(false); // ALWAYS show closed message
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formRef = useRef(null);
@@ -55,73 +54,9 @@ export default function EventPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // ✅ Show form only before 7 PM today
+  // 🚫 Registration permanently closed
   const showFinalForm = () => {
-    const now = new Date();
-    const close = new Date();
-    close.setHours(19, 0, 0, 0); // 7PM
-
-    if (now > close) {
-      setRegClosed(true);
-      return;
-    }
-
-    setShowForm(true);
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
-  };
-
-  const submitFinalForm = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const formData = {
-      name: e.target.name.value.trim(),
-      phone: e.target.phone.value.trim(),
-      email: e.target.email.value.trim(),
-      organization: e.target.organization.value.trim(),
-      designation: e.target.designation.value.trim(),
-    };
-
-    if (Object.values(formData).some((v) => !v)) {
-      alert("Please fill all the required fields.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/api/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        navigate("/confirmation");
-      } else {
-        alert("Registration failed. Please try again.");
-      }
-    } catch (err) {
-      console.error("Server error:", err);
-      alert("Server error, please try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    setRegClosed(true);
   };
 
   return (
@@ -177,7 +112,7 @@ export default function EventPage() {
         </div>
       </section>
 
-      {/* ✅ Inline Registration Closed Message */}
+      {/* 🚫 REGISTRATION CLOSED MESSAGE */}
       {regClosed && (
         <div
           style={{
@@ -205,43 +140,9 @@ export default function EventPage() {
           >
             We appreciate your enthusiasm for the SOLIDWORKS 2026 Launch Event.
             <br />
-            Registrations are now closed.
+            Registrations are now officially closed.
           </div>
         </div>
-      )}
-
-      {/* Registration Form */}
-      {showForm && !regClosed && (
-        <section className="final-form" ref={formRef}>
-          <h2>Complete Your Registration</h2>
-          <div className="container-flex">
-            <form className="order" onSubmit={submitFinalForm}>
-              <div className="form-section">
-                <label>Full Name</label>
-                <input type="text" name="name" required />
-              </div>
-              <div className="form-section">
-                <label>Phone Number</label>
-                <input type="tel" name="phone" required pattern="[0-9]{10}" />
-              </div>
-              <div className="form-section">
-                <label>Email ID</label>
-                <input type="email" name="email" required />
-              </div>
-              <div className="form-section">
-                <label>Organization</label>
-                <input type="text" name="organization" required />
-              </div>
-              <div className="form-section">
-                <label>Designation</label>
-                <input type="text" name="designation" required />
-              </div>
-              <button className="submit-btn" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Confirm Registration"}
-              </button>
-            </form>
-          </div>
-        </section>
       )}
     </div>
   );
